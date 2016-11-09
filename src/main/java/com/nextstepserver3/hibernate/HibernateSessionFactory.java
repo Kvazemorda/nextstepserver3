@@ -1,4 +1,4 @@
-package com.nextstepserver2.hibernate;
+package com.nextstepserver3.hibernate;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;

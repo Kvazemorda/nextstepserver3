@@ -15,10 +15,10 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
 
 
-        <mapping class="com.nextstepserver2.entity.CashFlowEntity"/>
-        <mapping class="com.nextstepserver2.entity.FamilyEntity"/>
-        <mapping class="com.nextstepserver2.entity.PersonEntity"/>
-        <mapping class="com.nextstepserver2.entity.TargetEntity"/>
-        <mapping class="com.nextstepserver2.entity.TaskEntity"/>
+        <mapping class="com.nextstepserver3.entity.CashFlowEntity"/>
+        <mapping class="com.nextstepserver3.entity.FamilyEntity"/>
+        <mapping class="com.nextstepserver3.entity.PersonEntity"/>
+        <mapping class="com.nextstepserver3.entity.TargetEntity"/>
+        <mapping class="com.nextstepserver3.entity.TaskEntity"/>
     </session-factory>
 </hibernate-configuration>

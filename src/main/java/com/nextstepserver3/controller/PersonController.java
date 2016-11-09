@@ -1,7 +1,7 @@
-package com.nextstepserver2.controller;
+package com.nextstepserver3.controller;
 
-import com.nextstepserver2.hibernate.HibernateSessionFactory;
-import com.nextstepserver2.entity.PersonEntity;
+import com.nextstepserver3.hibernate.HibernateSessionFactory;
+import com.nextstepserver3.entity.PersonEntity;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.web.bind.annotation.RequestMapping;

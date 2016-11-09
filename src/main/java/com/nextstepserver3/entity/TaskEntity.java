@@ -1,4 +1,4 @@
-package com.nextstepserver2.entity;
+package com.nextstepserver3.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
