@@ -12,7 +12,7 @@ public class PersonEntity {
     @Column(name = "ID", nullable = false) private int id;
     @Basic @Column private String name;
     @Basic @Column private String email;
-    @OneToMany private Set<TargetEntity> targets = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY) private Set<TargetEntity> targets = new HashSet<>();
     @ManyToMany private Set<FamilyEntity> familyEntitySet = new HashSet<>();
 
     public PersonEntity() {

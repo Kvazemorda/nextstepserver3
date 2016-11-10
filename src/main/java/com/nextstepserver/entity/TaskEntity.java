@@ -20,8 +20,8 @@ public class TaskEntity implements Comparable{
     @Temporal(TemporalType.DATE) @Column private Date dateEnd;
     @ManyToOne private TargetEntity targetByTarget;
     @Basic @Column private BigDecimal planCashFlow;
-    @OneToMany private Set<CashFlowEntity> cashFlowsById = new HashSet<>();
-    @OneToMany private Set<TaskEntity> taskChild = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY) private Set<CashFlowEntity> cashFlowsById = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY) private Set<TaskEntity> taskChild = new HashSet<>();
 
     public TaskEntity() {
     }
@@ -47,6 +47,11 @@ public class TaskEntity implements Comparable{
     public TaskEntity(String title, TargetEntity targetByTarget, BigDecimal planCashFlow) {
         this.title = title;
         this.targetByTarget = targetByTarget;
+        this.planCashFlow = planCashFlow;
+    }
+
+    public TaskEntity(String title,  BigDecimal planCashFlow) {
+        this.title = title;
         this.planCashFlow = planCashFlow;
     }
 

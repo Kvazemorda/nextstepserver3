@@ -1,4 +1,4 @@
-package com.nextstepserver.datatest;
+package com.nextstepserver.dao;
 
 public interface CRUD {
 

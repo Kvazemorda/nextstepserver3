@@ -13,7 +13,7 @@ public class TargetEntity {
     @Column(nullable = false) private int id;
     @Basic @Column private String title;
     @ManyToOne private PersonEntity person;
-    @OneToMany private Set<TaskEntity> tasksById = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY) private Set<TaskEntity> tasksById = new HashSet<>();
     @Basic @Column private boolean finishTarget;
 
     public TargetEntity() {

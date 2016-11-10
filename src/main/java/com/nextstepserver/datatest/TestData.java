@@ -1,5 +1,6 @@
 package com.nextstepserver.datatest;
 
+import com.nextstepserver.entity.CashFlowEntity;
 import com.nextstepserver.entity.PersonEntity;
 import com.nextstepserver.entity.TargetEntity;
 import com.nextstepserver.entity.TaskEntity;
@@ -13,6 +14,7 @@ public class TestData {
     public ArrayList<PersonEntity> listPerson;
     public ArrayList<TargetEntity> listTargets;
     public ArrayList<TaskEntity> listTask;
+    public ArrayList<CashFlowEntity> listCashFlow;
 
     public TestData() throws InterruptedException {
         PersonEntity ilya = new PersonEntity("Ilya", "ilyavanavara@mail.com");
@@ -21,6 +23,7 @@ public class TestData {
         listTargets = new ArrayList<>();
         listTask = new ArrayList<>();
         listPerson = new ArrayList<>();
+        listCashFlow = new ArrayList<>();
 
         listPerson.add(ilya);
         listPerson.add(luba);
@@ -137,5 +140,21 @@ public class TestData {
         listTask.add(task1TargetIlya3);
         listTask.add(task2TargetIlya3);
         listTask.add(task3TargetIlya3);
+
+        CashFlowEntity cashFlowEntity = new CashFlowEntity(BigDecimal.valueOf(102.50),"Products", new Date());
+        CashFlowEntity cashFlowEntity1 = new CashFlowEntity(BigDecimal.valueOf(502),"Cafe", new Date());
+        CashFlowEntity cashFlowEntity2 = new CashFlowEntity(BigDecimal.valueOf(100),"forTask1", new Date(), task1TargetIlya1);
+        CashFlowEntity cashFlowEntity3 = new CashFlowEntity(BigDecimal.valueOf(200), "forTask2Target1", new Date(), task1TargetIlya1);
+        CashFlowEntity cashFlowEntity4 = new CashFlowEntity(BigDecimal.valueOf(300), "forTask2Target1", new Date(), task1TargetIlya1);
+        CashFlowEntity cashFlowEntity5 = new CashFlowEntity(BigDecimal.valueOf(400), "forTask2Target1", new Date(),  task1TargetIlya1);
+
+        listCashFlow.add(cashFlowEntity);
+        listCashFlow.add(cashFlowEntity1);
+        listCashFlow.add(cashFlowEntity2);
+        listCashFlow.add(cashFlowEntity3);
+        listCashFlow.add(cashFlowEntity4);
+        listCashFlow.add(cashFlowEntity5);
+
     }
+
 }

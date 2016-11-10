@@ -2,19 +2,33 @@ package com.nextstepserver.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "CASHFLOW")
-public class CashFlowEntity {
+public class CashFlowEntity implements Comparable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false) private long id;
     @Basic @Column private BigDecimal balance;
     @Basic @Column private String title;
-    @Basic @Column private int task;
+    @Temporal(TemporalType.DATE) @Column(nullable = false) private Date date;
     @ManyToOne private TaskEntity taskByTask;
 
     public CashFlowEntity() {
+    }
+
+    public CashFlowEntity(BigDecimal balance, String title, Date date, TaskEntity taskByTask) {
+        this.balance = balance;
+        this.title = title;
+        this.date = date;
+        this.taskByTask = taskByTask;
+    }
+
+    public CashFlowEntity(BigDecimal balance, String title, Date date) {
+        this.balance = balance;
+        this.title = title;
+        this.date = date;
     }
 
     public long getId() {
@@ -38,12 +52,6 @@ public class CashFlowEntity {
         this.title = title;
     }
 
-    public int getTask() {
-        return task;
-    }
-    public void setTask(int task) {
-        this.task = task;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -54,7 +62,6 @@ public class CashFlowEntity {
 
         if (balance != that.balance) return false;
         if (id != that.id) return false;
-        if (task != that.task) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
 
         return true;
@@ -68,7 +75,6 @@ public class CashFlowEntity {
         temp = Long.parseLong(String.valueOf(balance));
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + task;
         return result;
     }
 
@@ -77,5 +83,14 @@ public class CashFlowEntity {
     }
     public void setTaskByTask(TaskEntity taskByTask) {
         this.taskByTask = taskByTask;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        CashFlowEntity cashFlowEntity = (CashFlowEntity) o;
+        if(this.date.before(cashFlowEntity.date)){
+            return -1;
+        }
+        return 1;
     }
 }
