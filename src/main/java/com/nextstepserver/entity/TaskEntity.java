@@ -1,4 +1,4 @@
-package com.nextstepserver3.entity;
+package com.nextstepserver.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "TASK")
-public class TaskEntity {
+public class TaskEntity implements Comparable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -158,6 +158,14 @@ public class TaskEntity {
         return "title='" + title + '\'' +
                 ", dateStart=" + dateStart +
                 ", cashFlowsById=" + cashFlowsById;
+    }
 
+    @Override
+    public int compareTo(Object o) {
+        TaskEntity taskEntity = (TaskEntity) o;
+        if(this.getTaskChild().contains(taskEntity)){
+            return 1;
+        }else
+        return -1;
     }
 }

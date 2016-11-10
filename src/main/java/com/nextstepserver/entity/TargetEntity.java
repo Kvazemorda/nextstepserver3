@@ -1,4 +1,4 @@
-package com.nextstepserver3.entity;
+package com.nextstepserver.entity;
 
 
 import javax.persistence.*;
@@ -10,7 +10,7 @@ import java.util.Set;
 public class TargetEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false) private int id;
+    @Column(nullable = false) private int id;
     @Basic @Column private String title;
     @ManyToOne private PersonEntity person;
     @OneToMany private Set<TaskEntity> tasksById = new HashSet<>();

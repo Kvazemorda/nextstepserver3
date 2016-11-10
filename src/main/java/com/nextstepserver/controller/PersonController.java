@@ -1,7 +1,7 @@
-package com.nextstepserver3.controller;
+package com.nextstepserver.controller;
 
-import com.nextstepserver3.hibernate.HibernateSessionFactory;
-import com.nextstepserver3.entity.PersonEntity;
+import com.nextstepserver.hibernate.HibernateSessionFactory;
+import com.nextstepserver.entity.PersonEntity;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +14,6 @@ public class PersonController {
     @RequestMapping("/persons")
     public PersonEntity getAllPerson(){
         Query query = session.createQuery("select person from PersonEntity person");
-        System.out.println(query.list().get(0));
-        System.out.println("start SPRING Query");
         PersonEntity personEntity = (PersonEntity) query.list().get(0);
         return personEntity;
     }

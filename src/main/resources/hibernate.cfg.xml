@@ -12,13 +12,13 @@
         <property name="hibernate.connection.pool_size">1</property>
         <property name="cache.provider_class">org.hibernate.cache.internal.NoCachingRegionFactory</property>
         <property name="show_sql">true</property>
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">create-drop</property>
 
 
-        <mapping class="com.nextstepserver3.entity.CashFlowEntity"/>
-        <mapping class="com.nextstepserver3.entity.FamilyEntity"/>
-        <mapping class="com.nextstepserver3.entity.PersonEntity"/>
-        <mapping class="com.nextstepserver3.entity.TargetEntity"/>
-        <mapping class="com.nextstepserver3.entity.TaskEntity"/>
+        <mapping class="com.nextstepserver.entity.CashFlowEntity"/>
+        <mapping class="com.nextstepserver.entity.FamilyEntity"/>
+        <mapping class="com.nextstepserver.entity.PersonEntity"/>
+        <mapping class="com.nextstepserver.entity.TargetEntity"/>
+        <mapping class="com.nextstepserver.entity.TaskEntity"/>
     </session-factory>
 </hibernate-configuration>
