@@ -1,5 +1,6 @@
 package com.nextstepserver.controller;
 
+import com.nextstepserver.entity.BalanceEntity;
 import com.nextstepserver.entity.PersonEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +12,7 @@ import java.util.Date;
 public class BalanceController {
 
     @RequestMapping
-    public BigDecimal currentBalance(PersonEntity personEntity, Date date){
+    public BalanceEntity currentBalance(PersonEntity personEntity, Date date){
 
         return null;
     }
