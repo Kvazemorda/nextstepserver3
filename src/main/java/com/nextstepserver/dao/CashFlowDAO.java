@@ -7,6 +7,8 @@ import com.nextstepserver.hibernate.HibernateSessionFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Date;
 import java.util.TreeSet;
 
 @Configuration
@@ -28,6 +30,18 @@ public class CashFlowDAO implements CRUD {
         Query query = session.createQuery(hql);
         query.setParameter("person", personEntity);
         query.setParameter("task", taskEntity);
+        TreeSet<CashFlowEntity> cashFlowEntities = new TreeSet<>(query.list());
+        return cashFlowEntities;
+    }
+
+    public TreeSet<CashFlowEntity> getSetCashFlowForPerson(PersonEntity personEntity, Date date){
+        String hql = "select cashflow from CashFlowEntity cashflow " +
+                "where cashflow.taskByTask.targetByTarget.person = :person " +
+                "and cashflow.date = :currentDate";
+
+        Query query = session.createQuery(hql);
+        query.setParameter("person", personEntity);
+        query.setParameter("currentDate", date);
         TreeSet<CashFlowEntity> cashFlowEntities = new TreeSet<>(query.list());
         return cashFlowEntities;
     }
