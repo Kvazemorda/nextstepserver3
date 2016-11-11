@@ -14,6 +14,7 @@ public class PersonEntity {
     @Basic @Column private String email;
     @OneToMany(fetch = FetchType.LAZY) private Set<TargetEntity> targets = new HashSet<>();
     @ManyToMany private Set<FamilyEntity> familyEntitySet = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY) private Set<BalanceEntity> balanceEntities = new HashSet<>();
 
     public PersonEntity() {
     }
@@ -80,6 +81,14 @@ public class PersonEntity {
     }
     public void setFamilyEntitySet(Set<FamilyEntity> familyEntitySet) {
         this.familyEntitySet = familyEntitySet;
+    }
+
+    public Set<BalanceEntity> getBalanceEntities() {
+        return balanceEntities;
+    }
+
+    public void setBalanceEntities(Set<BalanceEntity> balanceEntities) {
+        this.balanceEntities = balanceEntities;
     }
 
     @Override
