@@ -17,7 +17,7 @@ public class CashFlowDAO implements CRUD {
     Session session = HibernateSessionFactory.getSessionFactory().openSession();
 
     /**
-     * Get TreeSet casflow for Person who spend money on this task
+     * Get TreeSet cash flow for Person who spend money on this task
      * @param personEntity
      * @param taskEntity
      * @return TreeSet<CashFlow>
@@ -34,6 +34,12 @@ public class CashFlowDAO implements CRUD {
         return cashFlowEntities;
     }
 
+    /**
+     * Get TreeSet cash flow all income and expence person who was made
+     * @param personEntity
+     * @param date cash flow
+     * @return TreeSet<CashFlowEntity>
+     */
     public TreeSet<CashFlowEntity> getSetCashFlowForPerson(PersonEntity personEntity, Date date){
         String hql = "select cashflow from CashFlowEntity cashflow " +
                 "where cashflow.taskByTask.targetByTarget.person = :person " +

@@ -22,6 +22,7 @@ public class TaskEntity implements Comparable{
     @Basic @Column private BigDecimal planCashFlow;
     @OneToMany(fetch = FetchType.LAZY) private Set<CashFlowEntity> cashFlowsById = new HashSet<>();
     @OneToMany(fetch = FetchType.LAZY) private Set<TaskEntity> taskChild = new HashSet<>();
+    @Basic @Column private long repeatTask;
 
     public TaskEntity() {
     }
@@ -107,6 +108,14 @@ public class TaskEntity implements Comparable{
     }
     public void setPlanCashFlow(BigDecimal planCashFlow) {
         this.planCashFlow = planCashFlow;
+    }
+
+    public long getRepeatTask() {
+        return repeatTask;
+    }
+
+    public void setRepeatTask(long repeatTask) {
+        this.repeatTask = repeatTask;
     }
 
     @Override
