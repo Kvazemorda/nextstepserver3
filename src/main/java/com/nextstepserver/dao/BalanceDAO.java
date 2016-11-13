@@ -24,51 +24,35 @@ public class BalanceDAO implements CRUD {
     }
 
     /**
-     * What is BalanceEntity - it has two variable
-     * 1. If Task don't complete then Balance equals sum(plan cash flow) or sum(current cash flow) - it depends from who
-     * is biggest.
-     * 2. If Task complete then BalanceEntity equals sum(cash flow for this Task)
-     * Get balance on current date for current person
-     * If balance don't exist then we create new BalanceEntity. Where we have two ways.
-     * 1. If we have BalanceEntity before date when new balance equals balance before date plus
-     * cash flow from before date to current date
-     * 2. If we don't have the balance, it this time we sum all cash flow and create new Balance in this date
+     * We get balance of complete task before current date. Balance for today computing in mobile app from list task
+     * If balance don't exist then we create new BalanceEntity. Where we have three ways.
+     * 1. If we have BalanceEntity before today we return this.
+     * 2. If we don't have the before balance, it this time we sum all cash flow and create new Balance in before date
      * 3. If we don't have the balance and don't have cash flow we created balance with ZERO.
-     * @param person
-     * @param date
-     * @return
-     */
-    public BalanceEntity getCurrentBalance(PersonEntity person, Date date){
-        BalanceEntity balanceEntity = getBalance(person, date);
-        if(balanceEntity != null){
-            return balanceEntity;
-        }
-        return createNewBalance(person, date);
-    }
 
-    /**
-     * Get balance for person in current date
+     * Get balance for person in before date
      * @param person
      * @param date
      * @return BalanceEntity
      */
-    private BalanceEntity getBalance(PersonEntity person, Date date){
+    public BalanceEntity getBalance(PersonEntity person, Date date){
         String hql = "select balance from BalanceEntity balance " +
                 "where balance.personEntity = :person " +
-                "and balance.dateBalance = :date";
+                "and balance.dateBalance < :date";
 
         Query query = session.createQuery(hql);
         query.setParameter("person", person);
         query.setParameter("date", date);
-        if(query.list().isEmpty()){
+        if(!query.list().isEmpty() || query.list().size() != 0){
+
             return (BalanceEntity) query.list().get(0);
         }else {
-            return null;
+            return createNewBalance(person, date);
         }
     }
 
     /**
-     * create new Balance. check on exist balance befor today, if list balance is not empty get first balance before
+     * Create new Balance. check on exist balance befor today, if list balance is not empty get first balance before
      * today,
      * if before balance is not exist create new BalanceEntity:
      * check cashflow befor today,
@@ -80,24 +64,23 @@ public class BalanceDAO implements CRUD {
      */
     private BalanceEntity createNewBalance(PersonEntity person, Date date){
 
-        return null;
+        return createNewBalanceFromCashFlow(person, date);
     }
 
-    private BalanceEntity creteNewBalanceFromBalanceBefor(PersonEntity personEntity, Date date){
 
-        return null;
-    }
-
-    private BalanceEntity createNewBalanceFromCashflow(PersonEntity personEntity, Date date){
+    private BalanceEntity createNewBalanceFromCashFlow(PersonEntity personEntity, Date date){
         String hql = "select sum(cashflow.balance) from CashFlowEntity cashflow " +
                 "where cashflow.taskByTask.targetByTarget.person = :person " +
-                "and cashflow.date <= :date";
+                "and cashflow.date < :date";
 
         Query query = session.createQuery(hql);
         query.setParameter("person", personEntity);
         query.setParameter("date", date);
 
         BigDecimal bigDecimal = (BigDecimal) query.list().get(0);
+        if(bigDecimal == null){
+            return createZeroBalance(personEntity,date);
+        }
         BalanceEntity balanceEntity = new BalanceEntity(bigDecimal, date, personEntity);
 
         return balanceEntity;
@@ -109,7 +92,7 @@ public class BalanceDAO implements CRUD {
      * @param date
      * @return BalanceEntity
      */
-    private BalanceEntity craateZeroBalance(PersonEntity personEntity, Date date){
+    private BalanceEntity createZeroBalance(PersonEntity personEntity, Date date){
         BalanceEntity balanceEntity = new BalanceEntity(BigDecimal.ZERO, date, personEntity);
 
         return balanceEntity;
