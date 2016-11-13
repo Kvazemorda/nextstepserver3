@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import static java.math.BigDecimal.*;
+
 @Configuration
 public class BalanceDAO implements CRUD {
 
@@ -24,7 +26,7 @@ public class BalanceDAO implements CRUD {
     }
 
     /**
-     * We get balance of complete task before current date. Balance for today computing in mobile app from list task
+     * We get balance of complete task previous current date. Balance for today computing in mobile app from list task
      * If balance don't exist then we create new BalanceEntity. Where we have three ways.
      * 1. If we have BalanceEntity before today we return this.
      * 2. If we don't have the before balance, it this time we sum all cash flow and create new Balance in before date
@@ -48,6 +50,28 @@ public class BalanceDAO implements CRUD {
             return (BalanceEntity) query.list().get(0);
         }else {
             return createNewBalance(person, date);
+        }
+    }
+
+    /**
+     * If previous balance not yesterday, need add sum cash flow from previous Balance and before current Balance
+     * @param previousDate
+     * @param today
+     * @return
+     */
+    private BigDecimal getCFBetweenPreviousAndYestardqyBalance(Date previousDate, Date today){
+        String hql = "select sum(cashflow.balance) from CashFlowEntity cashflow " +
+                "where cashflow.date > :previousDate " +
+                "and cashflow.date < :today";
+
+        Query query = session.createQuery(hql);
+        query.setParameter("previousDate", previousDate);
+        query.setParameter("today", today);
+        BigDecimal cashflow = (BigDecimal) query.list().get(0);
+        if ((query.list().size() > 0) || cashflow.intValue() > 0){
+            return cashflow;
+        }else {
+            return null;
         }
     }
 
@@ -93,7 +117,7 @@ public class BalanceDAO implements CRUD {
      * @return BalanceEntity
      */
     private BalanceEntity createZeroBalance(PersonEntity personEntity, Date date){
-        BalanceEntity balanceEntity = new BalanceEntity(BigDecimal.ZERO, date, personEntity);
+        BalanceEntity balanceEntity = new BalanceEntity(ZERO, date, personEntity);
 
         return balanceEntity;
     }
