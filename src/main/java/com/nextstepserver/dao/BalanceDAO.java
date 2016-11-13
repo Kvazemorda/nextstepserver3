@@ -46,8 +46,15 @@ public class BalanceDAO implements CRUD {
         query.setParameter("person", person);
         query.setParameter("date", date);
         if(!query.list().isEmpty() || query.list().size() != 0){
-
-            return (BalanceEntity) query.list().get(0);
+                BalanceEntity previousBalance = (BalanceEntity) query.list().get(0);
+                BigDecimal CFBetweenPrevious = getCFBetweenPreviousAndYestardqyBalance(previousBalance.getDateBalance()
+                ,date);
+            //if cash flow exist between previousBalance and before current day, we add sum cash flow to previous Balance
+            if(CFBetweenPrevious != null){
+                previousBalance.setBalance(previousBalance.getBalance().add(CFBetweenPrevious));
+                saveObject(previousBalance);
+            }
+            return previousBalance;
         }else {
             return createNewBalance(person, date);
         }
@@ -120,26 +127,5 @@ public class BalanceDAO implements CRUD {
         BalanceEntity balanceEntity = new BalanceEntity(ZERO, date, personEntity);
 
         return balanceEntity;
-    }
-
-    /**
-     * Get a plan cash flow from task whose is not complete
-     * @param personEntity
-     * @param date
-     * @return BigDecimal
-     */
-    private BigDecimal getPlanCashFlowForNotCompleteTask(PersonEntity personEntity, Date date){
-        String hql = "select sum(task.planCashFlow) from TaskEntity task " +
-                "where task.targetByTarget.person = :person " +
-                "and task.dateStart = :date " +
-                "and task.dateEnd is null";
-
-        Query query = session.createQuery(hql);
-        query.setParameter("person", personEntity);
-        query.setParameter("date", date);
-
-        BigDecimal bigDecimal = (BigDecimal) query.list().get(0);
-
-        return bigDecimal;
     }
 }
