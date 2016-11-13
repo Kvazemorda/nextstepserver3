@@ -52,7 +52,7 @@ public class BalanceDAO implements CRUD {
     }
 
     /**
-     * Create new Balance. check on exist balance befor today, if list balance is not empty get first balance before
+     * Create new Balance. check on exist balance before today, if list balance is not empty get first balance before
      * today,
      * if before balance is not exist create new BalanceEntity:
      * check cashflow befor today,
