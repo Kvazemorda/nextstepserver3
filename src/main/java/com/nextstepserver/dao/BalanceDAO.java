@@ -47,7 +47,7 @@ public class BalanceDAO implements CRUD {
         query.setParameter("date", date);
         if(!query.list().isEmpty() || query.list().size() != 0){
                 BalanceEntity previousBalance = (BalanceEntity) query.list().get(0);
-                BigDecimal CFBetweenPrevious = getCFBetweenPreviousAndYestardqyBalance(previousBalance.getDateBalance()
+                BigDecimal CFBetweenPrevious = getCFBetweenPreviousAndYestardayBalance(previousBalance.getDateBalance()
                 ,date);
             //if cash flow exist between previousBalance and before current day, we add sum cash flow to previous Balance
             if(CFBetweenPrevious != null){
@@ -66,7 +66,7 @@ public class BalanceDAO implements CRUD {
      * @param today
      * @return
      */
-    private BigDecimal getCFBetweenPreviousAndYestardqyBalance(Date previousDate, Date today){
+    private BigDecimal getCFBetweenPreviousAndYestardayBalance(Date previousDate, Date today){
         String hql = "select sum(cashflow.balance) from CashFlowEntity cashflow " +
                 "where cashflow.date > :previousDate " +
                 "and cashflow.date < :today";
