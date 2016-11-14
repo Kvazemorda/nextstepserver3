@@ -75,7 +75,7 @@ public class BalanceDAO implements CRUD {
         query.setParameter("previousDate", previousDate);
         query.setParameter("today", today);
         BigDecimal cashflow = (BigDecimal) query.list().get(0);
-        if ((query.list().size() > 0) || cashflow.intValue() > 0){
+        if ((query.list().size() > 0) && cashflow.intValue() > 0){
             return cashflow;
         }else {
             return null;
