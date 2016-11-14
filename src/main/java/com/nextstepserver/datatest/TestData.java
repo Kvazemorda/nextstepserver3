@@ -17,7 +17,7 @@ public class TestData {
     public ArrayList<CashFlowEntity> listCashFlow;
 
     public TestData() throws InterruptedException {
-        PersonEntity ilya = new PersonEntity("Ilya", "ilyavanavara@mail.com");
+        PersonEntity ilya = new PersonEntity("Valya", "ilyavanavara@mail.com");
         PersonEntity luba = new PersonEntity("Luba", "luba@mail.com");
 
         listTargets = new ArrayList<>();
