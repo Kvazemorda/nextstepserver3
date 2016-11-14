@@ -24,4 +24,17 @@ public class PersonDAO implements CRUD {
         Query query = session.createQuery("select person from PersonEntity person");
         return query.list();
     }
+
+    public boolean personIsExist(PersonEntity personEntity){
+        String hql = "select distinct person from PersonEntity person " +
+                "where person = :personComing";
+
+        Query query = session.createQuery(hql);
+        query.setParameter("personComing", personEntity);
+        PersonEntity personExist = (PersonEntity) query.list().get(0);
+        if(personExist != null && personEntity.equals(personExist)){
+            return true;
+        }
+        else return false;
+    }
 }
