@@ -8,7 +8,6 @@ import org.hibernate.Session;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
-import java.util.TreeSet;
 
 @Configuration
 public class TaskDAO implements CRUD {
@@ -22,14 +21,24 @@ public class TaskDAO implements CRUD {
      * We must get task, who was not finished
      * @return TreeSet<TaskEntity>
      */
-    public TreeSet<TaskEntity> getCurrentTask(PersonEntity personEntity){
+    public List<TaskEntity> getCurrentTask(PersonEntity personEntity){
         String hql = "select task from TaskEntity task " +
-                "where task.targetByTarget.person = :person " +
+                "where task.targetByTarget.person.name = :person " +
                 "and task.dateEnd is null";
+        String name = "Valya";
+        Query query = session.createQuery(hql);
+        query.setParameter("person", name);
+
+        List<TaskEntity> tasks = query.list();
+        return tasks;
+    }
+
+    public TaskEntity getTask(){
+        String hql = "select task from TaskEntity task ";
+
 
         Query query = session.createQuery(hql);
-        query.setParameter("person", personEntity);
-        TreeSet<TaskEntity> tasks = new TreeSet<>(query.list());
+        TaskEntity tasks = (TaskEntity) query.list().get(0);
         return tasks;
     }
 
