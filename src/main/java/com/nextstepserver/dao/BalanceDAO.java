@@ -33,17 +33,17 @@ public class BalanceDAO implements CRUD {
      * 3. If we don't have the balance and don't have cash flow we created balance with ZERO.
 
      * Get balance for person in before date
-     * @param person
+     * @param login
      * @param date
      * @return BalanceEntity
      */
-    public BalanceEntity getBalance(PersonEntity person, Date date){
+    public BalanceEntity getBalance(String login, Date date){
         String hql = "select balance from BalanceEntity balance " +
-                "where balance.personEntity = :person " +
+                "where balance.personEntity.name = :person " +
                 "and balance.dateBalance < :date";
 
         Query query = session.createQuery(hql);
-        query.setParameter("person", person);
+        query.setParameter("person", login);
         query.setParameter("date", date);
         if(!query.list().isEmpty() || query.list().size() != 0){
                 BalanceEntity previousBalance = (BalanceEntity) query.list().get(0);
@@ -56,7 +56,7 @@ public class BalanceDAO implements CRUD {
             }
             return previousBalance;
         }else {
-            return createNewBalance(person, date);
+            return createNewBalance(login, date);
         }
     }
 
@@ -89,30 +89,30 @@ public class BalanceDAO implements CRUD {
      * check cashflow befor today,
      * if sum cashflow is not empty create new Balance from (sum(Cashflow), person and today)
      * else create new Balance from(ZERO, person and today)
-     * @param person
+     * @param login
      * @param date
      * @return
      */
-    private BalanceEntity createNewBalance(PersonEntity person, Date date){
+    private BalanceEntity createNewBalance(String login, Date date){
 
-        return createNewBalanceFromCashFlow(person, date);
+        return createNewBalanceFromCashFlow(login, date);
     }
 
 
-    private BalanceEntity createNewBalanceFromCashFlow(PersonEntity personEntity, Date date){
+    private BalanceEntity createNewBalanceFromCashFlow(String login, Date date){
         String hql = "select sum(cashflow.balance) from CashFlowEntity cashflow " +
-                "where cashflow.taskByTask.targetByTarget.person = :person " +
+                "where cashflow.taskByTask.targetByTarget.person.name = :person " +
                 "and cashflow.date < :date";
 
         Query query = session.createQuery(hql);
-        query.setParameter("person", personEntity);
+        query.setParameter("person", login);
         query.setParameter("date", date);
 
         BigDecimal bigDecimal = (BigDecimal) query.list().get(0);
         if(bigDecimal == null){
-            return createZeroBalance(personEntity,date);
+            return createZeroBalance(getPerson(login),date);
         }
-        BalanceEntity balanceEntity = new BalanceEntity(bigDecimal, date, personEntity);
+        BalanceEntity balanceEntity = new BalanceEntity(bigDecimal, date, getPerson(login));
 
         return balanceEntity;
     }
@@ -127,5 +127,16 @@ public class BalanceDAO implements CRUD {
         BalanceEntity balanceEntity = new BalanceEntity(ZERO, date, personEntity);
 
         return balanceEntity;
+    }
+
+    private PersonEntity getPerson(String login){
+        String hql = "select person from PersonEntity person " +
+                "where person.name =: loginPerson";
+        Query query = session.createQuery(hql);
+        query.setParameter("loginPerson", login);
+
+        PersonEntity personEntity = (PersonEntity) query.list().get(0);
+
+        return personEntity;
     }
 }

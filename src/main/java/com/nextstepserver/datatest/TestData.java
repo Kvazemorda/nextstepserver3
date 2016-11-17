@@ -20,6 +20,7 @@ public class TestData {
         PersonEntity ilya = new PersonEntity("Valya", "ilyavanavara@mail.com");
         PersonEntity luba = new PersonEntity("Luba", "luba@mail.com");
 
+
         listTargets = new ArrayList<>();
         listTask = new ArrayList<>();
         listPerson = new ArrayList<>();

@@ -24,10 +24,11 @@ public class TaskDAO implements CRUD {
     public List<TaskEntity> getCurrentTask(PersonEntity personEntity){
         String hql = "select task from TaskEntity task " +
                 "where task.targetByTarget.person.name = :person " +
+                "and task.targetByTarget.person.email = :email " +
                 "and task.dateEnd is null";
-        String name = "Valya";
         Query query = session.createQuery(hql);
-        query.setParameter("person", name);
+        query.setParameter("person", personEntity.getName());
+        query.setParameter("email", personEntity.getEmail());
 
         List<TaskEntity> tasks = query.list();
         return tasks;
