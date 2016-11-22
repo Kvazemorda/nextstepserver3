@@ -9,7 +9,7 @@ import java.util.Set;
 public class PersonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false) private int id;
+    @Column(name = "ID", nullable = false) private long id;
     @Basic @Column private String name;
     @Basic @Column private String email;
     @OneToMany(fetch = FetchType.LAZY) private Set<TargetEntity> targets = new HashSet<>();
@@ -24,10 +24,10 @@ public class PersonEntity {
         this.email = email;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

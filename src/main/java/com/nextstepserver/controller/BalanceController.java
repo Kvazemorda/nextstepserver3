@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-
 @RestController
 public class    BalanceController {
 
@@ -15,7 +13,9 @@ public class    BalanceController {
     BalanceDAO balanceDAO;
 
     @RequestMapping("/balance")
-    public BalanceEntity currentBalance(String login, Date date){
+    public BalanceEntity currentBalance(long login, long date){
+        System.out.println(login);
+        System.out.printf(" " + date);
         return balanceDAO.getBalance(login, date);
     }
 

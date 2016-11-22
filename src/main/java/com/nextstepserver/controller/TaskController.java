@@ -21,9 +21,9 @@ public class TaskController {
 
 
     @RequestMapping("/tasks")
-    public List<TaskEntity> getTasks(String personEntity){
-        System.out.println(personEntity);
-            return null; //taskDAO.getCurrentTask(personEntity);
+    public List<TaskEntity> getTasks(long login){
+        System.out.println(login);
+            return taskDAO.getCurrentTask(login);
     }
 
 }

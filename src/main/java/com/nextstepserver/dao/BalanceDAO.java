@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import static java.math.BigDecimal.*;
+import static java.math.BigDecimal.ZERO;
 
 @Configuration
 public class BalanceDAO implements CRUD {
@@ -37,18 +37,21 @@ public class BalanceDAO implements CRUD {
      * @param date
      * @return BalanceEntity
      */
-    public BalanceEntity getBalance(String login, Date date){
+    public BalanceEntity getBalance(long login, long date){
+        long person = getIdPerson(login);
+        Date currentDate = getDate(date);
+
         String hql = "select balance from BalanceEntity balance " +
-                "where balance.personEntity.name = :person " +
+                "where balance.personEntity.id = :person " +
                 "and balance.dateBalance < :date";
 
         Query query = session.createQuery(hql);
-        query.setParameter("person", login);
-        query.setParameter("date", date);
+        query.setParameter("person", person);
+        query.setParameter("date", currentDate);
         if(!query.list().isEmpty() || query.list().size() != 0){
                 BalanceEntity previousBalance = (BalanceEntity) query.list().get(0);
-                BigDecimal CFBetweenPrevious = getCFBetweenPreviousAndYestardayBalance(previousBalance.getDateBalance()
-                ,date);
+                BigDecimal CFBetweenPrevious = getCFBetweenPreviousAndYesterdayBalance(previousBalance.getDateBalance()
+                ,currentDate);
             //if cash flow exist between previousBalance and before current day, we add sum cash flow to previous Balance
             if(CFBetweenPrevious != null){
                 previousBalance.setBalance(previousBalance.getBalance().add(CFBetweenPrevious));
@@ -56,7 +59,7 @@ public class BalanceDAO implements CRUD {
             }
             return previousBalance;
         }else {
-            return createNewBalance(login, date);
+            return createNewBalance(person, currentDate);
         }
     }
 
@@ -66,7 +69,7 @@ public class BalanceDAO implements CRUD {
      * @param today
      * @return
      */
-    private BigDecimal getCFBetweenPreviousAndYestardayBalance(Date previousDate, Date today){
+    private BigDecimal getCFBetweenPreviousAndYesterdayBalance(Date previousDate, Date today){
         String hql = "select sum(cashflow.balance) from CashFlowEntity cashflow " +
                 "where cashflow.date > :previousDate " +
                 "and cashflow.date < :today";
@@ -93,15 +96,15 @@ public class BalanceDAO implements CRUD {
      * @param date
      * @return
      */
-    private BalanceEntity createNewBalance(String login, Date date){
+    private BalanceEntity createNewBalance(long login, Date date){
 
         return createNewBalanceFromCashFlow(login, date);
     }
 
 
-    private BalanceEntity createNewBalanceFromCashFlow(String login, Date date){
+    private BalanceEntity createNewBalanceFromCashFlow(long login, Date date){
         String hql = "select sum(cashflow.balance) from CashFlowEntity cashflow " +
-                "where cashflow.taskByTask.targetByTarget.person.name = :person " +
+                "where cashflow.taskByTask.targetByTarget.person.id = :person " +
                 "and cashflow.date < :date";
 
         Query query = session.createQuery(hql);
@@ -129,14 +132,33 @@ public class BalanceDAO implements CRUD {
         return balanceEntity;
     }
 
-    private PersonEntity getPerson(String login){
-        String hql = "select person from PersonEntity person " +
-                "where person.name =: loginPerson";
+    private long getIdPerson(long id){
+        return id;
+    }
+    private Date getDate(long date){
+        /*String format = "EEE MMM dd HH:mm:ss z 08:00 yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        Date currentDate = null;
+        Date testDate = new Date();
+
+        try {
+            currentDate = simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            System.out.println(testDate);
+            e.printStackTrace();
+        }*/
+
+        Date currentDate = new Date(date);
+
+        return currentDate;
+    }
+    private PersonEntity getPerson(long id){
+        String hql = "select distinct person from PersonEntity person " +
+                "where person.id = :id";
+
         Query query = session.createQuery(hql);
-        query.setParameter("loginPerson", login);
-
+        query.setParameter("id", id);
         PersonEntity personEntity = (PersonEntity) query.list().get(0);
-
         return personEntity;
     }
 }

@@ -1,6 +1,5 @@
 package com.nextstepserver.dao;
 
-import com.nextstepserver.entity.PersonEntity;
 import com.nextstepserver.entity.TaskEntity;
 import com.nextstepserver.hibernate.HibernateSessionFactory;
 import org.hibernate.Query;
@@ -21,14 +20,13 @@ public class TaskDAO implements CRUD {
      * We must get task, who was not finished
      * @return TreeSet<TaskEntity>
      */
-    public List<TaskEntity> getCurrentTask(PersonEntity personEntity){
+    public List<TaskEntity> getCurrentTask(long login){
+        Long person = getPerson(login);
         String hql = "select task from TaskEntity task " +
-                "where task.targetByTarget.person.name = :person " +
-                "and task.targetByTarget.person.email = :email " +
+                "where task.targetByTarget.person.id = :person " +
                 "and task.dateEnd is null";
         Query query = session.createQuery(hql);
-        query.setParameter("person", personEntity.getName());
-        query.setParameter("email", personEntity.getEmail());
+        query.setParameter("person", person);
 
         List<TaskEntity> tasks = query.list();
         return tasks;
@@ -58,5 +56,9 @@ public class TaskDAO implements CRUD {
         }
         session.getTransaction().commit();
 
+    }
+
+    public Long getPerson(long login){
+        return login;
     }
 }
