@@ -1,4 +1,4 @@
-package com.nextstepserver.datatest;
+package datatest;
 
 import com.nextstepserver.entity.*;
 

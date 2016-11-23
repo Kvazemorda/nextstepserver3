@@ -42,12 +42,12 @@ public class CashFlowDAO implements CRUD {
      */
     public TreeSet<CashFlowEntity> getSetCashFlowForPerson(PersonEntity personEntity, Date date){
         String hql = "select cashflow from CashFlowEntity cashflow " +
-                "where cashflow.taskByTask.targetByTarget.person = :person " +
-                "and cashflow.date = :currentDate";
+                "where cashflow.taskByTask.targetByTarget.person = :person ";
+              //  "and cashflow.date = :currentDate";
 
         Query query = session.createQuery(hql);
         query.setParameter("person", personEntity);
-        query.setParameter("currentDate", date);
+        //query.setParameter("currentDate", date);
         TreeSet<CashFlowEntity> cashFlowEntities = new TreeSet<>(query.list());
         return cashFlowEntities;
     }
